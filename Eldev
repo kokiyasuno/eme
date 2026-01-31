@@ -1,0 +1,11 @@
+; -*- mode: emacs-lisp; lexical-binding: t -*-
+
+;; Specify main file location
+(setf eldev-project-main-file "eme/eme.el")
+
+;; Add eme directory to load path
+(eldev-add-loading-roots 'build "eme")
+(eldev-add-loading-roots 'test "eme")
+
+;; Use buttercup for testing
+(setf eldev-test-framework 'buttercup)

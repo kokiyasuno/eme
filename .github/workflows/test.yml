@@ -1,0 +1,36 @@
+name: Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        emacs-version:
+          - '29.1'
+          - '29.4'
+          - 'snapshot'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Emacs
+        uses: jcs090218/setup-emacs@master
+        with:
+          version: ${{ matrix.emacs-version }}
+
+      - name: Install Eldev
+        run: curl -fsSL https://raw.github.com/doublep/eldev/master/webinstall/github-eldev | sh
+
+      - name: Initialize packages
+        run: eldev prepare
+
+      - name: Byte compile
+        run: eldev compile --warnings-as-errors
+
+      - name: Run tests
+        run: eldev test
